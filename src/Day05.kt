@@ -12,21 +12,23 @@ fun main() {
 
         val incorrectUpdates = getUpdatesWhereCorrectnessIs(false, updates, rules)
 
-        incorrectUpdates.forEach { update ->
-            for (i in 0..<update.size) {
+        val fixedUpdates = incorrectUpdates.map { update ->
+            val fixedUpdate = update.toMutableList()
+            for (i in 0..<fixedUpdate.size) {
                 for (j in 0..<i) {
                     rules.forEach { rule ->
-                        if (update[i] == rule.first && update[j] == rule.second) {
-                            val temp = update[i]
-                            update[i] = update[j]
-                            update[j] = temp
+                        if (fixedUpdate[i] == rule.first && fixedUpdate[j] == rule.second) {
+                            val temp = fixedUpdate[i]
+                            fixedUpdate[i] = fixedUpdate[j]
+                            fixedUpdate[j] = temp
                         }
                     }
                 }
             }
+            fixedUpdate
         }
 
-        return sumCenterValues(incorrectUpdates)
+        return sumCenterValues(fixedUpdates)
     }
 
     val testInput = readInput("Day05_test")
@@ -37,26 +39,26 @@ fun main() {
     part2(input).println()
 }
 
-private fun getRulesAndUpdates(input: List<String>): Pair<List<Pair<Int, Int>>, List<MutableList<Int>>> {
+private fun getRulesAndUpdates(input: List<String>): Pair<List<Pair<Int, Int>>, List<List<Int>>> {
     val (rawRules, rawUpdates) = input.partition { it.contains("|") }
     val rules = rawRules
         .map { it.split("|") }
         .map { Pair(it.first().toInt(), it.last().toInt()) }
 
     val updates = rawUpdates.filter { it.isNotEmpty() }
-        .map { line -> line.split(",").map { it.toInt() }.toMutableList() }
+        .map { line -> line.split(",").map { it.toInt() } }
     return Pair(rules, updates)
 }
 
-private fun sumCenterValues(updates: List<MutableList<Int>>) =
+private fun sumCenterValues(updates: List<List<Int>>) =
     updates.map { it[(it.size - 1) / 2] }.reduce { acc, next -> acc + next }
 
 
 private fun getUpdatesWhereCorrectnessIs(
     correctness: Boolean,
-    updates: List<MutableList<Int>>,
+    updates: List<List<Int>>,
     rules: List<Pair<Int, Int>>
-): List<MutableList<Int>> {
+): List<List<Int>> {
    return updates.filter { update ->
         val disallowed = mutableSetOf<Int>()
         update.forEach { number ->
