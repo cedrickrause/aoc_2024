@@ -18,9 +18,9 @@ fun main() {
                 for (j in 0..<i) {
                     rules.forEach { rule ->
                         if (fixedUpdate[i] == rule.first && fixedUpdate[j] == rule.second) {
-                            val temp = fixedUpdate[i]
-                            fixedUpdate[i] = fixedUpdate[j]
-                            fixedUpdate[j] = temp
+                            fixedUpdate[i] = fixedUpdate[i] xor fixedUpdate[j]
+                            fixedUpdate[j] = fixedUpdate[i] xor fixedUpdate[j]
+                            fixedUpdate[i] = fixedUpdate[i] xor fixedUpdate[j]
                         }
                     }
                 }
