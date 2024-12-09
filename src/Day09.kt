@@ -27,7 +27,6 @@ fun main() {
             .filterIndexed { index, _ -> index % 2 == 0 }
             .mapIndexed { index, value -> (0..<value).map { index } }
             .toMutableList()
-            .also { it.println() }
 
         val ans = split
             .mapIndexed { index, value ->
@@ -36,7 +35,6 @@ fun main() {
             }
             .map { it.toMutableList() }
             .toMutableList()
-            .also { it.println() }
 
         files.reversed().forEach { block ->
 //            println("----------------")
