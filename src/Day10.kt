@@ -2,35 +2,23 @@ fun main() {
     fun part1(input: List<String>): Int {
         val grid = getGrid(input)
 
-        var ans = 0
-
-        for (i in grid.indices) {
-            for (j in grid.first().indices) {
-                val pos = Pair(i, j)
-                if (grid[pos.first][pos.second] == 0) {
-                    ans += calculateTrailheadScore(pos, 0, grid).size
-                }
+        return grid.indices.flatMap { lineIndex ->
+            grid.first().indices.map { colIndex ->
+                if (grid[lineIndex][colIndex] == 0) calculateTrailheadScore(Pair(lineIndex, colIndex), 0, grid).size
+                else 0
             }
-        }
-
-        return ans
+        }.reduce { acc, next -> acc + next}
     }
 
     fun part2(input: List<String>): Int {
         val grid = getGrid(input)
 
-        var ans = 0
-
-        for (i in grid.indices) {
-            for (j in grid.first().indices) {
-                val pos = Pair(i, j)
-                if (grid[pos.first][pos.second] == 0) {
-                    ans += calculateTrailheadRating(pos, 0, grid)
-                }
+        return grid.indices.flatMap { lineIndex ->
+            grid.first().indices.map { colIndex ->
+                if (grid[lineIndex][colIndex] == 0) calculateTrailheadRating(Pair(lineIndex, colIndex), 0, grid)
+                else 0
             }
-        }
-
-        return ans
+        }.reduce { acc, next -> acc + next}
     }
 
     val testInput = readInput("Day10_test")
@@ -59,7 +47,6 @@ private fun calculateTrailheadScore(position: Pair<Int, Int>, value: Int, grid: 
         goals.addAll(calculateTrailheadScore(Pair(position.first, position.second+1), value+1, grid))
     return goals
 }
-
 
 private fun calculateTrailheadRating(position: Pair<Int, Int>, value: Int, grid: List<List<Int>>): Int {
     if (value == 9) return 1
